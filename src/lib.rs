@@ -126,6 +126,13 @@ where
         })
     }
 
+    /// Check if there are new accelerometer data to read
+    pub fn is_accel_data_ready(&mut self) -> Result<bool, E> {
+        let status_bits = self.read_accel_register(accel::RegisterAddress::STATUS_REG_A)?;
+        let status = accel::StatusRegisterA::from_bits(status_bits);
+        Ok(status.xyz_data_available())
+    }
+
     /// Sets the accelerometer output data rate
     pub fn accel_odr(&mut self, odr: AccelOdr) -> Result<(), E> {
         self.modify_register(|reg: ControlRegister1A| reg.with_output_data_rate(odr))
