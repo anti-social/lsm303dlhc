@@ -17,7 +17,7 @@ accelerometer = ["dep:accelerometer"]
 defmt = ["dep:defmt", "lsm303dlhc-registers/defmt"]
 
 [dependencies]
-accelerometer = { version = "0.12.0", optional = true }
+accelerometer = { git = "https://github.com/rust-embedded-community/accelerometer.rs.git", rev = "0b61975", optional = true }
 bitfield-struct = "0.12.1"
 cast = { version = "0.3.0", default-features = false }
 defmt = { version = "1.0.1", optional = true }

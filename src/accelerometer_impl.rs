@@ -7,7 +7,7 @@ use core::fmt::Debug;
 use hal::i2c::I2c;
 use lsm303dlhc_registers::accel;
 
-impl<I2C, E> RawAccelerometer<accelerometer::vector::I16x3> for LSM303DLHC<I2C>
+impl<I2C, E> RawAccelerometer<i16, accelerometer::vector::I16x3> for LSM303DLHC<I2C>
 where
     I2C: I2c<Error = E>,
     E: Debug,
@@ -60,11 +60,11 @@ where
         const NO_OF_BITS: i32 = 1 << 16;
         const SENSITIVITY: i32 = 1;
         const SCALE_FACTOR: f32 = (MAGNITUDE as f32 / NO_OF_BITS as f32) * SENSITIVITY as f32;
-        Ok(F32x3::new(
-            reading.x as f32 * SCALE_FACTOR,
-            reading.y as f32 * SCALE_FACTOR,
-            reading.z as f32 * SCALE_FACTOR,
-        ))
+        Ok(F32x3 {
+            x: reading.x as f32 * SCALE_FACTOR,
+            y: reading.y as f32 * SCALE_FACTOR,
+            z: reading.z as f32 * SCALE_FACTOR,
+        })
     }
 
     fn sample_rate(&mut self) -> Result<f32, Error<Self::Error>> {
