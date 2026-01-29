@@ -21,7 +21,7 @@ extern crate embedded_hal as hal;
 use cast::u16;
 use generic_array::typenum::consts::*;
 use generic_array::{ArrayLength, GenericArray};
-use hal::blocking::i2c::{Write, WriteRead};
+use hal::i2c::I2c;
 use lsm303dlhc_registers::accel::{self, *};
 use lsm303dlhc_registers::mag::{self, *};
 use lsm303dlhc_registers::{Register, WritableRegister};
@@ -32,7 +32,6 @@ pub use lsm303dlhc_registers::mag::MagOdr;
 #[cfg(feature = "accelerometer")]
 #[cfg_attr(docsrs, doc(cfg(feature = "accelerometer")))]
 mod accelerometer_impl;
-pub mod wrapper;
 
 /// LSM303DLHC driver.
 #[deprecated(since = "0.3.0", note = "Please use `LSM303DLHC` instead")]
@@ -46,12 +45,12 @@ pub struct LSM303DLHC<I2C> {
 
 impl<I2C, E> LSM303DLHC<I2C>
 where
-    I2C: WriteRead<Error = E> + Write<Error = E>,
+    I2C: I2c<Error = E>,
 {
     /// Creates a new driver from a I2C peripheral
     ///
     /// ## Shared use of the I2C bus
-    /// To use the I2C bus with multiple devices, consider using [`RefCellI2C::into`](wrapper::refcell::RefCellI2C).
+    /// Use `embedded-hal-bus` crate
     pub fn new(i2c: I2C) -> Result<Self, E> {
         let mut sensor = Self { i2c };
 

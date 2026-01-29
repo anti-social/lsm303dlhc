@@ -4,12 +4,12 @@ use crate::{I16x3, LSM303DLHC};
 use accelerometer::vector::F32x3;
 use accelerometer::{Accelerometer, Error, RawAccelerometer};
 use core::fmt::Debug;
-use hal::blocking::i2c::{Write, WriteRead};
+use hal::i2c::I2c;
 use lsm303dlhc_registers::accel;
 
 impl<I2C, E> RawAccelerometer<accelerometer::vector::I16x3> for LSM303DLHC<I2C>
 where
-    I2C: WriteRead<Error = E> + Write<Error = E>,
+    I2C: I2c<Error = E>,
     E: Debug,
 {
     type Error = E;
@@ -21,7 +21,7 @@ where
 
 impl<I2C, E> Accelerometer for LSM303DLHC<I2C>
 where
-    I2C: WriteRead<Error = E> + Write<Error = E>,
+    I2C: I2c<Error = E>,
     E: Debug,
 {
     type Error = E;
